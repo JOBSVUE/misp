@@ -6,19 +6,19 @@ services:
     tmpfs:
       - /tmp
     volumes:
-      - mysql_data:/var/lib/mysql
+      - misp_mysql_data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: misp
       MYSQL_USER: misp
-      MYSQL_PASSWORD: password # Please change for production
-      MYSQL_ROOT_PASSWORD: password # Please change for production
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
   redis:
     image: redis:7.4
     restart: always
     container_name: misp-redis
     volumes:
-      - redis_data:/data
+      - misp_redis_data:/data
 
   misp-modules:
     image: ghcr.io/nukib/misp-modules:latest
@@ -56,15 +56,16 @@ services:
     environment:
       MYSQL_HOST: mysql
       MYSQL_LOGIN: misp
-      MYSQL_PASSWORD: password # Please change for production
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: misp
       REDIS_HOST: redis
+      SERVICE_FQDN_MISP:
       MISP_BASEURL: http://localhost:8080
-      MISP_UUID: 0a674a5a-c4cb-491d-80cf-5adb48b5c1cd # Please change for production
-      MISP_ORG: Testing org # Please change for production
+      MISP_UUID: ${MISP_UUID}
+      MISP_ORG: ${MISP_ORG}
       MISP_MODULE_URL: http://misp-modules
-      MISP_EMAIL: ahoj@example.com # Please change for production
-      SECURITY_SALT: PleaseChangeForProduction # Please change for production
+      MISP_EMAIL: ${MISP_EMAIL}
+      SECURITY_SALT: ${SECURITY_SALT}
       ZEROMQ_ENABLED: yes
       SYSLOG_ENABLED: no
       ECS_LOG_ENABLED: yes
@@ -76,13 +77,10 @@ services:
       - misp_img_orgs:/var/www/MISP/app/files/img/orgs/
       - misp_img_custom:/var/www/MISP/app/files/img/custom/
       - misp_gnupg:/var/www/MISP/.gnupg/
-    ports:
-      - "127.0.0.1:8080:80"
-      - "127.0.0.1:50000:50000"
 
 volumes:
-  mysql_data:
-  redis_data:
+  misp_mysql_data:
+  misp_redis_data:
   misp_logs:
   misp_certs:
   misp_attachments:
