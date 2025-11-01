@@ -1,17 +1,4 @@
 services:
-  mysql:
-    image: mariadb:11.5
-    restart: always
-    container_name: misp-mysql
-    tmpfs:
-      - /tmp
-    volumes:
-      - misp_mysql_data:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
   redis:
     image: redis:7.4
@@ -37,7 +24,6 @@ services:
     restart: always
     container_name: misp
     depends_on:
-      - mysql
       - redis
     tmpfs:
       - /tmp
@@ -54,12 +40,13 @@ services:
       - path: .env_s3
         required: false
     environment:
+      DATABASE_URL: ${DATABASE_URL}
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_LOGIN: ${MYSQL_LOGIN}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       REDIS_HOST: redis
-      SERVICE_FQDN_MISP:
+      SERVICE_FQDN_MISP_8080:
       MISP_BASEURL: http://localhost:8080
       MISP_UUID: ${MISP_UUID}
       MISP_ORG: ${MISP_ORG}
