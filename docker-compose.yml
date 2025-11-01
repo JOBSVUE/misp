@@ -8,8 +8,8 @@ services:
     volumes:
       - misp_mysql_data:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: misp
-      MYSQL_USER: misp
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
@@ -54,10 +54,10 @@ services:
       - path: .env_s3
         required: false
     environment:
-      MYSQL_HOST: mysql
-      MYSQL_LOGIN: misp
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_LOGIN: ${MYSQL_LOGIN}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: misp
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       REDIS_HOST: redis
       SERVICE_FQDN_MISP:
       MISP_BASEURL: http://localhost:8080
